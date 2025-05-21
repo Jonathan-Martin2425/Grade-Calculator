@@ -1,0 +1,32 @@
+:root {
+    --margin-horizontal-body: 1rem;
+    --margin-bottom-header: 1rem;
+    --margin-column-container: 1rem 0;
+    --padding-vertical-header: 1rem;
+    --padding-login-box: 1rem;
+    --padding-login-input: 0 1rem;
+    --padding-table: 1em 1em;
+    --padding-logout: 0.25rem 1rem;
+    --gap-header: 1rem;
+    --gap-header-desktop: 2rem;
+    --gap-nav: 1.5rem;
+    --gap-main: 2rem;
+    --gap-column-container: 1rem;
+    --gap-login-box: 1rem;
+    --width-create: 2rem;
+    --width-login-box: 40rem;
+    --width-login-enter: 4rem;
+    --height-login: 100vh;
+    --background-color-header: lightgray;
+    --background-color-login: lightgray;
+    --background-color-login-box: lightblue;
+    --border-header: 0.25rem solid black;
+    --border-table: 1px solid black;
+    --border-split: 0.2rem solid black;
+    --color-a: black;
+    --font-size-th: larger;
+    --font-size-login: 1.5rem;
+    --text-decoration-head-row: underline;
+    --grid-templete-columns-main-desktop: 1fr 2fr;
+    --grid-templete-columns-login-box-desktop: 1fr 3fr;
+}
