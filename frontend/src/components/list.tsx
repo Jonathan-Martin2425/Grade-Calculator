@@ -1,12 +1,18 @@
-interface ListItemProps {
+import { Link } from "react-router";
+
+
+export interface ListItemProps {
     name: string,
+    linkTo?: string,
     onClick?: () => void,
 }
 
 interface ListProps {
     title: string,
+    linkTo: string,
     items: ListItemProps[],
     isHeader: boolean,
+    currentItem?: string,
 }
 
 function List(props: ListProps){
@@ -18,10 +24,15 @@ function List(props: ListProps){
     return (
         <fieldset className={containerClass} id={props.title}>
             {props.items.map((item: ListItemProps) => {
+                let selected: string = "";
+                if(props.currentItem ? props.currentItem === item.name : false){
+                    selected = " selected";
+                }
+                
                 return (
-                    <a className="list-item" onClick={item.onClick ? item.onClick : () => console.log("hello world")}>
+                    <Link to={item.linkTo ? props.linkTo + item.linkTo : props.linkTo} className={"list-item" + selected} onClick={item.onClick ? item.onClick : () => console.log("hello world")}>
                         {item.name}
-                    </a>
+                    </Link>
                 );
             })}
             <input type="button" className="button list-item" id={"create-" + props.title} value="+"/>

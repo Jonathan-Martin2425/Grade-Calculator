@@ -145,6 +145,11 @@ td {
     font-size: 2em;   
 }
 
+.selected {
+    border: 1px solid firebrick;
+    padding: 0.5em
+}
+
 .dark-mode-container {
     display: flex;
     justify-content: center;

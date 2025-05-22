@@ -2,8 +2,10 @@ import List from "./list";
 import Calculator from "./gradeCalculator";
 
 interface MainContainerProps {
+    linkTo: string;
     listName: string,
     list: ListItemProps[],
+    selectedItem?: string
 }
 
 interface ListItemProps {
@@ -24,15 +26,17 @@ const CalculatorRows: CalculatorRow[] = [
 ];
 
 function MainContainer(props: MainContainerProps){
-    return (<main>
-        <div className="column-container" id="left">
-            <h2>Cumulative GPA</h2>
-            <p className="list-item bigger">3.5</p>
-            <h2>{props.listName}</h2>
-            <List title={props.listName} items={props.list} isHeader={false}/>
-        </div>
-        <Calculator title="Single-Class Calculator" rows={CalculatorRows}/>
-    </main>);
+    return (
+        <main>
+            <div className="column-container" id="left">
+                <h2>Cumulative GPA</h2>
+                <p className="list-item bigger">3.5</p>
+                <h2>{props.listName}</h2>
+                <List title={props.listName} linkTo={props.linkTo} items={props.list} currentItem={props.selectedItem} isHeader={false}/>
+            </div>
+            <Calculator title="Single-Class Calculator" rows={CalculatorRows}/>
+        </main>
+    );
 }
 
 export default MainContainer;
