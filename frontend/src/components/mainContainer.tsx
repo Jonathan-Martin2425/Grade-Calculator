@@ -1,10 +1,13 @@
 import List from "./list";
 import Calculator from "./gradeCalculator";
+import type { SchoolPosition } from "../App";
 
 interface MainContainerProps {
     linkTo: string;
     listName: string,
     list: ListItemProps[],
+    position: SchoolPosition,
+    addNewItem: (data: ListItemProps, position: SchoolPosition) => void,
     selectedItem?: string
 }
 
@@ -32,7 +35,15 @@ function MainContainer(props: MainContainerProps){
                 <h2>Cumulative GPA</h2>
                 <p className="list-item bigger">3.5</p>
                 <h2>{props.listName}</h2>
-                <List title={props.listName} linkTo={props.linkTo} items={props.list} currentItem={props.selectedItem} isHeader={false}/>
+                <List 
+                    title={props.listName} 
+                    linkTo={props.linkTo} 
+                    items={props.list} 
+                    currentItem={props.selectedItem} 
+                    addNewItem={props.addNewItem}
+                    position={props.position}
+                    isHeader={false}
+                />
             </div>
             <Calculator title="Single-Class Calculator" rows={CalculatorRows}/>
         </main>

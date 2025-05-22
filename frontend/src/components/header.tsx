@@ -1,7 +1,8 @@
+import { Link } from "react-router";
+
 interface HeaderProps {
     title: string,
     children: React.ReactNode,
-
 }
 
 
@@ -17,7 +18,7 @@ function Header(props: HeaderProps){
                         <input type="checkbox" id="dark-mode"></input>
                     </div>
                     <form method="get" action="index.html">
-                        <input type="submit" className="logout-button" value="Logout" formAction="index.html"/>
+                        <Link to="/"><input type="submit" className="logout-button" value="Logout" formAction="index.html"/></Link>
                     </form>
                 </div>
             </nav> 

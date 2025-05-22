@@ -89,8 +89,14 @@ td {
     margin: var(--margin-column-container);
 }
 
-.list-item {
+.list-item{
     align-self: center;
+}
+
+.list-item-container {
+    display: flex;
+    align-self: center;
+    gap: 1em;
 }
 
 .login {
@@ -133,6 +139,16 @@ td {
     min-width: var(--width-create);
 }
 
+.text-input {
+    align-self: center;
+    min-width: var(--width-create);
+}
+
+.header-text-input {
+    align-self: center;
+    min-width: var(--width-create);
+}
+
 .logout {
     align-self: end;
 }
@@ -147,6 +163,7 @@ td {
 
 .selected {
     border: 1px solid firebrick;
+    border-radius: 1em;
     padding: 0.5em
 }
 

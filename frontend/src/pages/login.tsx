@@ -2,6 +2,8 @@
     switchPage: (e: React.MouseEvent<HTMLElement>) => void,
 }*/
 
+import { Link } from "react-router";
+
 function Login(){
     return (
         <main className="login">
@@ -12,7 +14,7 @@ function Login(){
                 <p>Password</p>
                 <input type="password" className="login-input"/>
                 <form method="get" className="login-enter" action="homepage.html">
-                    <input type="button" className="login-enter" value="Enter"/>
+                    <Link to="/homepage"><input type="button" className="login-enter" value="Enter"/></Link>
                 </form>
             </div>
         </main>
