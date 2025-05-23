@@ -1,13 +1,13 @@
 import List from "./list";
 import Calculator from "./gradeCalculator";
-import type { SchoolPosition } from "../App";
+import type { Quarter, School, SchoolPosition } from "../App";
 
 interface MainContainerProps {
     linkTo: string;
     listName: string,
     list: ListItemProps[],
     position: SchoolPosition,
-    addNewItem: (data: ListItemProps, position: SchoolPosition) => void,
+    doCrudOperation: (position: SchoolPosition, operation: string, data1: ListItemProps, data2?: School | Quarter | ListItemProps) => void,
     selectedItem?: string
 }
 
@@ -29,6 +29,10 @@ const CalculatorRows: CalculatorRow[] = [
 ];
 
 function MainContainer(props: MainContainerProps){
+    let isSingle = true;
+    if(props.listName === "Classes"){
+        isSingle = false;
+    }
     return (
         <main>
             <div className="column-container" id="left">
@@ -40,12 +44,12 @@ function MainContainer(props: MainContainerProps){
                     linkTo={props.linkTo} 
                     items={props.list} 
                     currentItem={props.selectedItem} 
-                    addNewItem={props.addNewItem}
+                    doCrudOperation={props.doCrudOperation}
                     position={props.position}
                     isHeader={false}
                 />
             </div>
-            <Calculator title="Single-Class Calculator" rows={CalculatorRows}/>
+            <Calculator rows={CalculatorRows} isSingle={isSingle} doCrudOperation={props.doCrudOperation}/>
         </main>
     );
 }

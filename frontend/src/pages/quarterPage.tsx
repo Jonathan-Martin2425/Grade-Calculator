@@ -2,13 +2,13 @@ import Header from "../components/header";
 import MainContainer from "../components/mainContainer";
 import { useParams } from "react-router";
 import { Link } from "react-router";
-import { type Quarter, type SchoolPosition } from "../App";
+import { type Quarter, type School, type SchoolPosition } from "../App";
 import type { ListItemProps } from "../components/list";
 
 interface QuarterPageProps {
     quarters: Quarter[],
     position: SchoolPosition,
-    addNewItem: (data: ListItemProps, position: SchoolPosition) => void,
+    doCrudOperation: (position: SchoolPosition, operation: string, data1: ListItemProps, data2?: School | Quarter | ListItemProps) => void,
 }
 
 export default function QuarterPage(props: QuarterPageProps){
@@ -39,7 +39,7 @@ export default function QuarterPage(props: QuarterPageProps){
                 list={props.quarters[currentQuarterIndex].classes} 
                 selectedItem={classItem ? classItem : ""}
                 position={newPosition}
-                addNewItem={props.addNewItem}
+                doCrudOperation={props.doCrudOperation}
 
             />
         ];

@@ -2,12 +2,12 @@ import Header from "../components/header";
 import List, { type ListItemProps } from "../components/list";
 import MainContainer from "../components/mainContainer";
 import { useParams } from "react-router";
-import { type School, type SchoolPosition } from "../App";
+import { type Quarter, type School, type SchoolPosition } from "../App";
 
 interface HomepageProps{
     schools: School[],
     setCurrentSchoolIndex: (i: number) => void,
-    addNewItem: (data: ListItemProps, position: SchoolPosition) => void,
+    doCrudOperation: (position: SchoolPosition, operation: string, data1: ListItemProps, data2?: School | Quarter | ListItemProps) => void,
 }
 
 export function Homepage(props: HomepageProps){
@@ -31,14 +31,14 @@ export function Homepage(props: HomepageProps){
                     isHeader={true} 
                     currentItem={props.schools[currentSchoolIndex].name}
                     position={{}}
-                    addNewItem={props.addNewItem}
+                    doCrudOperation={props.doCrudOperation}
                 />
             </Header>,
             <MainContainer 
                 listName="Quarters" 
                 linkTo={"/quarter/"} 
                 list={props.schools[currentSchoolIndex].quarters}
-                addNewItem={props.addNewItem}
+                doCrudOperation={props.doCrudOperation}
                 position={{school: props.schools[currentSchoolIndex].name}}
             />
         ]

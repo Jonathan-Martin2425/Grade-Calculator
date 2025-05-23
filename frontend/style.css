@@ -89,14 +89,23 @@ td {
     margin: var(--margin-column-container);
 }
 
-.list-item{
-    align-self: center;
-}
-
-.list-item-container {
+/*actually row container*/
+.column-container-list-item{
     display: flex;
     align-self: center;
     gap: 1em;
+}
+
+.header-container-list-item{
+    display: flex;
+    flex-direction: column;
+    align-self: center;
+    align-items: center;
+    gap: 1em;
+}
+
+.list-item{
+    align-self: center;
 }
 
 .login {
@@ -136,7 +145,8 @@ td {
 }
 
 .button {
-    min-width: var(--width-create);
+    width: var(--width-create);
+
 }
 
 .text-input {
