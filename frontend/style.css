@@ -28,6 +28,7 @@ main {
     flex-direction: column;
     margin: 0 var(--margin-horizontal-body);
     gap: var(--gap-main);
+    background-color: var(--background-color-main);
 }
 
 fieldset {
@@ -188,6 +189,10 @@ td {
 #quarters {
     display: flex;
     align-items: start;
+}
+
+.dark-mode{
+    background-color: var(--background-color-main);
 }
 
 /* {

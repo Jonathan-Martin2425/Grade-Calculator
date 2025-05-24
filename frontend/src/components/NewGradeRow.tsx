@@ -1,13 +1,33 @@
 import { useState } from "react";
 import type { Grade } from "../App";
 
-interface NewGradRowProps {
-    onClick: (row: Grade) => void,
+interface ChangeGradRowProps {
+    deleteRow: () => void,
+    ChangeType: string,
+    createRow?: (row: Grade) => void,
+    editRow?: (newRow: Grade) => void,
+    startRow?: Grade,
 }
 
-function NewGradRow(props: NewGradRowProps){
-    const emptyGrade: Grade = {catagory: "", percentage: NaN, grade: "/"}
-    const [grade, setGrade] = useState(emptyGrade);
+function ChangeGradRow(props: ChangeGradRowProps){
+    let startGrade: Grade = {catagory: "", percentage: NaN, grade: "/"}
+    if(props.startRow) {startGrade = props.startRow}
+    const [grade, setGrade] = useState(startGrade);
+
+    let changeType: () => void = () => console.log("changeType not assigned");
+    if(props.ChangeType === "edit"){
+        changeType = (() => {
+            if(props.editRow){
+                props.editRow(grade);
+            }
+        })
+    }else if(props.ChangeType === "create"){
+        changeType = (() => {
+            if(props.createRow){
+                props.createRow(grade);
+            }
+        })
+    }
 
     function handleChange(e: React.ChangeEvent<HTMLInputElement>, inputType: string){
         const gradeCopy: Grade = Object.assign({}, grade);
@@ -78,16 +98,24 @@ function NewGradRow(props: NewGradRowProps){
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleChange(e, "gradeDenom")}
                 />
             </td>
-            <td><input 
+            <td>
+                <input 
                 type="button" 
                 className="button list-item" 
                 id={"create-input"} 
                 value="+" 
-                onClick={() => props.onClick(grade)}
+                onClick={changeType}
+                />
+                <input 
+                type="button" 
+                className="button" 
+                id={"create-input"} 
+                value="-" 
+                onClick={props.deleteRow}
                 />
             </td>
         </tr>
     );
 }
 
-export default NewGradRow;
+export default ChangeGradRow;

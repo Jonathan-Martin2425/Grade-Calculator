@@ -38,6 +38,8 @@ export interface Grade {
 export interface SchoolPosition {
     school?: string,
     quarter?: string,
+    class?: string,
+    gradeIndex?: number,
 }
 
 const SCHOOLS: School[] = [
@@ -74,13 +76,23 @@ const SCHOOLS: School[] = [
 function App() {
     const [schools, setSchools] = useState(SCHOOLS);
     const [currentSchoolIndex, setCurrentSchoolIndex] = useState(0);
+    const [isDarkMode, setIsDarkMode]= useState(false);
 
-    function doCrudOperation(position: SchoolPosition, operation: string, data1: ListItemProps, data2?: School | Quarter | ListItemProps){
+    function doCrudOperation(
+        position: SchoolPosition, 
+        operation: string, 
+        data1: ListItemProps | Grade, 
+        data2?: School | Quarter | ListItemProps | Grade,
+    ){
         let schoolsCopy = schools.slice();
 
+
+        // Gets indexes and dataType from the given position variable
         const indexes = {
             schoolIndex: 0,
             quarterIndex: 0,
+            classIndex: 0,
+            gradeIndex: 0,
             dataType: "school",
         };
 
@@ -104,7 +116,19 @@ function App() {
                     }
                 }
                 indexes.quarterIndex = quarterIndex;
-                indexes.dataType = "class";               
+
+                if(position.class){
+                    let classIndex = 0;
+                    for(let k in schoolsCopy[schoolIndex].quarters){
+                        if(schoolsCopy[schoolIndex].quarters[quarterIndex].classes[k].name === position.class){
+                            classIndex = Number(k);
+                        }
+                    }
+                    indexes.classIndex = classIndex;
+                    indexes.dataType = "grade"; 
+                }else{
+                    indexes.dataType = "class"; 
+                }              
             }else{
                 // if position contains school name, changes quarters
                 indexes.dataType = "quarter";
@@ -112,32 +136,38 @@ function App() {
         }// if position is empty, changes schools
 
 
+        // Excecutes given operation depending on the dataType found
         switch(operation){
             case "create":
                 switch(indexes.dataType){
                     case "school":
-                        const newItem = createNewItem("school", data1) as School;
+                        const newItem = createNewItem("school", data1 as ListItemProps) as School;
                         schoolsCopy.push(newItem);
                         break;
                     case "quarter":
-                        const newItem2 = createNewItem("quarter", data1) as Quarter;
+                        const newItem2 = createNewItem("quarter", data1 as ListItemProps) as Quarter;
                         schoolsCopy[indexes.schoolIndex].quarters.push(newItem2);
                         break;
                     case "class":
-                        const newItem3 = createNewItem("class", data1) as Course;
+                        const newItem3 = createNewItem("class", data1 as ListItemProps) as Course;
                         schoolsCopy[indexes.schoolIndex].quarters[indexes.quarterIndex].classes.push(newItem3);
+                        break;
+                    case "grade":
+                        const newItem4 = createNewItem("grade", data1 as Grade) as Grade;
+                        schoolsCopy[indexes.schoolIndex].quarters[indexes.quarterIndex].classes[indexes.classIndex].gradeRows.push(newItem4);
                         break;
                 } 
                 break;
             case "delete":
                 switch(indexes.dataType){
                     case "school":
-                        schoolsCopy = schoolsCopy.filter(c => c.name !== data1.name);
+                        let data1Typecast: ListItemProps = data1 as ListItemProps;
+                        schoolsCopy = schoolsCopy.filter(c => c.name !== data1Typecast.name);
 
                         //makes sure current school stays selected after list is changed
                         let currentSchoolIndex: number = 0;
                         for(let i in schoolsCopy){
-                            if(schoolsCopy[i].name === data1.name){
+                            if(schoolsCopy[i].name === data1Typecast.name){
                                 currentSchoolIndex = Number(i);
                             }
                         }
@@ -145,37 +175,55 @@ function App() {
 
                         break;
                     case "quarter":
-                        schoolsCopy[indexes.schoolIndex].quarters = schoolsCopy[indexes.schoolIndex].quarters.filter(c => c.name !== data1.name);
+                        let data1Typecast2: ListItemProps = data1 as ListItemProps;
+                        schoolsCopy[indexes.schoolIndex].quarters = schoolsCopy[indexes.schoolIndex].quarters.filter(c => c.name !== data1Typecast2.name);
                         break;
                     case "class":
+                        let data1Typecast3: ListItemProps = data1 as ListItemProps;
                         schoolsCopy[indexes.schoolIndex].quarters[indexes.quarterIndex].classes = 
-                        schoolsCopy[indexes.schoolIndex].quarters[indexes.quarterIndex].classes.filter(c => c.name !== data1.name);
+                        schoolsCopy[indexes.schoolIndex].quarters[indexes.quarterIndex].classes.filter(c => c.name !== data1Typecast3.name);
+                        break;
+                    case "grade":
+                        let data1Typecast4: Grade = data1 as Grade;
+                        schoolsCopy[indexes.schoolIndex].quarters[indexes.quarterIndex].classes[indexes.classIndex].gradeRows = 
+                        schoolsCopy[indexes.schoolIndex].quarters[indexes.quarterIndex].classes[indexes.classIndex].gradeRows.filter(c => c !== data1Typecast4);
                         break;
                 } 
                 break;
             case "update":
+
+                //only case for grade is used, may implement other editing in the future
                 switch(indexes.dataType){
                     case "school":
                         if(!data2) return
                         const data2Ref: School = data2 as School;
-                        const dataRef = schoolsCopy.find(c => c.name === data1.name);
-                        if(!dataRef) return
-                        dataRef.name = data2.name;
+                        const dataRef = schoolsCopy.find(c => c.name === (data1 as ListItemProps).name);
+                        if(!dataRef) return // makes sure data found using .find isn't null
+                        dataRef.name = (data2 as School).name;
                         dataRef.quarters = data2Ref.quarters;
                         break;
                     case "quarter":
                         if(!data2) return
                         const data2Ref2: Quarter = data2 as Quarter;
-                        const dataRef2 = schoolsCopy[indexes.schoolIndex].quarters.find(c => c.name === data1.name);
-                        if(!dataRef2) return
-                        dataRef2.name = data2.name;
+                        const dataRef2 = schoolsCopy[indexes.schoolIndex].quarters.find(c => c.name === (data1 as ListItemProps).name);
+                        if(!dataRef2) return // makes sure data found using .find isn't null
+                        dataRef2.name = (data2 as Quarter).name;
                         dataRef2.classes = data2Ref2.classes;
                         break;
                     case "class":
                        if(!data2) return
-                        const dataRef3 = schoolsCopy[indexes.schoolIndex].quarters[indexes.quarterIndex].classes.find(c => c.name === data1.name);
-                        if(!dataRef3) return
-                        dataRef3.name = data2.name;
+                        const dataRef3 = schoolsCopy[indexes.schoolIndex].quarters[indexes.quarterIndex].classes.find(c => c.name === (data1 as ListItemProps).name);
+                        if(!dataRef3) return // makes sure data found using .find isn't null
+                        dataRef3.name = (data2 as Course).name;
+                        break;
+                    case "grade":
+                        if(!data2) return
+                        let dataRef4 = schoolsCopy[indexes.schoolIndex].quarters[indexes.quarterIndex].classes[indexes.classIndex]
+                        .gradeRows.find(c => c === (data1 as Grade));
+                        if(!dataRef4) return // makes sure data found using .find isn't null
+                        dataRef4.catagory = (data2 as Grade).catagory;
+                        dataRef4.grade = (data2 as Grade).grade;
+                        dataRef4.percentage = (data2 as Grade).percentage;
                         break;
                 } 
                 break;
@@ -184,24 +232,40 @@ function App() {
         setSchools(schoolsCopy);
     }
 
-    function createNewItem(itemType: string, data: ListItemProps){
+    function createNewItem(itemType: string, data: ListItemProps | Grade){
         if(itemType === "school"){
             const item: School = {
-                name: data.name,
+                name: (data as ListItemProps).name,
                 quarters: new Array<Quarter>(),
             }
             return item
         }else if (itemType === "quarter"){
             const item: Quarter = {
-                name: data.name,
+                name: (data as ListItemProps).name,
                 classes: new Array<Course>(),
             }
             return item
         }else if(itemType === "class"){
-            return data
+            const item: Course = {
+                name: (data as ListItemProps).name,
+                gradeRows: new Array<Grade>(),
+            }
+            return item
+        }else if(itemType === "grade"){
+            return data as Grade;
         }
     }
 
+    function TogleDarkMode(){
+        setIsDarkMode(!isDarkMode);
+    }
+
+
+    let darkModeClass = "";
+    if(isDarkMode){
+        darkModeClass = "dark-mode";
+    }
+    
     return (
         <Routes>
             <Route path="/" element={<Login/>}/>
@@ -210,6 +274,8 @@ function App() {
                     schools={schools} 
                     setCurrentSchoolIndex={setCurrentSchoolIndex}
                     doCrudOperation={doCrudOperation}
+                    toggleDarkMode={TogleDarkMode}
+                    darkModeClass={darkModeClass}
                 />
             }/>
             <Route path="/homepage" 
@@ -217,10 +283,14 @@ function App() {
                     setCurrentSchoolIndex={setCurrentSchoolIndex}
                     schools={schools}
                     doCrudOperation={doCrudOperation}
+                    toggleDarkMode={TogleDarkMode}
+                    darkModeClass={darkModeClass}
                 />
             }/>
             <Route path="/quarter" element={
                 <QuarterPage 
+                    toggleDarkMode={TogleDarkMode}
+                    darkModeClass={darkModeClass}
                     quarters={schools[currentSchoolIndex].quarters} 
                     position={{school: schools[currentSchoolIndex].name}}
                     doCrudOperation={doCrudOperation}
@@ -228,6 +298,8 @@ function App() {
             }/>
             <Route path="/quarter/:quarter" element={
                 <QuarterPage 
+                    toggleDarkMode={TogleDarkMode}
+                    darkModeClass={darkModeClass}
                     quarters={schools[currentSchoolIndex].quarters}
                     position={{school: schools[currentSchoolIndex].name}}
                     doCrudOperation={doCrudOperation}
@@ -235,6 +307,8 @@ function App() {
             }/>
             <Route path="/quarter/:quarter/class/:classItem" element={
                 <QuarterPage 
+                    toggleDarkMode={TogleDarkMode}
+                    darkModeClass={darkModeClass}
                     quarters={schools[currentSchoolIndex].quarters}
                     position={{school: schools[currentSchoolIndex].name}}
                     doCrudOperation={doCrudOperation}

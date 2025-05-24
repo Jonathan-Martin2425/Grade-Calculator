@@ -18,6 +18,7 @@
     --width-login-enter: 4rem;
     --height-login: 100vh;
     --background-color-header: lightgray;
+     --background-color-main: white;
     --background-color-login: lightgray;
     --background-color-login-box: lightblue;
     --border-header: 0.25rem solid black;
@@ -29,4 +30,15 @@
     --text-decoration-head-row: underline;
     --grid-templete-columns-main-desktop: 1fr 2fr;
     --grid-templete-columns-login-box-desktop: 1fr 3fr;
+}
+
+.dark-mode {
+    --background-color-header: lightgray;
+    --background-color-login: gray;
+    --background-color-login-box: blue;
+    --background-color-main: gray;
+    --border-header: 0.25rem solid lightgray;
+    --border-table: 1px solid lightgray;
+    --border-split: 0.2rem solid lightgray;
+    --color-a: white;
 }

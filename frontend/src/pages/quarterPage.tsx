@@ -2,13 +2,15 @@ import Header from "../components/header";
 import MainContainer from "../components/mainContainer";
 import { useParams } from "react-router";
 import { Link } from "react-router";
-import { type Quarter, type School, type SchoolPosition } from "../App";
+import { type Grade, type Quarter, type School, type SchoolPosition } from "../App";
 import type { ListItemProps } from "../components/list";
 
 interface QuarterPageProps {
+    toggleDarkMode: () => void,
+    darkModeClass: string,
     quarters: Quarter[],
     position: SchoolPosition,
-    doCrudOperation: (position: SchoolPosition, operation: string, data1: ListItemProps, data2?: School | Quarter | ListItemProps) => void,
+    doCrudOperation: (position: SchoolPosition, operation: string, data1: ListItemProps | Grade, data2?: School | Quarter | ListItemProps | Grade) => void,
 }
 
 export default function QuarterPage(props: QuarterPageProps){
@@ -27,12 +29,13 @@ export default function QuarterPage(props: QuarterPageProps){
         quarter: props.quarters[currentQuarterIndex].name,
     }
 
-    return [
-            <Header title={quarter ? quarter : "No Quarter Given"}>
+    return (
+        <div className={props.darkModeClass}>
+            <Header title={quarter ? quarter : "No Quarter Given"} darkModeClass={props.darkModeClass} toggleDarkMode={props.toggleDarkMode}>
                 <div className="header-container">
                     <Link to="/homepage" className="bigger">Back</Link>
                 </div>
-            </Header>,
+            </Header>   
             <MainContainer 
                 listName="Classes" 
                 linkTo={quarter ? "/quarter/" + quarter + "/class/" : "/quarter/"} 
@@ -42,5 +45,6 @@ export default function QuarterPage(props: QuarterPageProps){
                 doCrudOperation={props.doCrudOperation}
 
             />
-        ];
+        </div>
+    );
 }
