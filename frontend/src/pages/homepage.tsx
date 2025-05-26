@@ -57,7 +57,9 @@ export function Homepage(props: HomepageProps){
         return classGrades.reduce((prev: number, cur: number) => prev + cur)/classGrades.length + 0;
     });
 
+
     quarterGrades = quarterGrades.filter((grade: number) => grade != -1);
+    if(quarterGrades.length === 0) {quarterGrades = [0]}
     let CumulativeGPA: string = ((quarterGrades.reduce((prev: number, cur: number) => prev + cur))/quarterGrades.length + 0).toFixed(2);
 
     props.setCurrentSchoolIndex(currentSchoolIndex);

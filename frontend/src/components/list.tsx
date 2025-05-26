@@ -16,6 +16,7 @@ interface ListProps {
     position: SchoolPosition,
     doCrudOperation: (position: SchoolPosition, operation: string, data1: ListItemProps, data2?: School | Quarter | ListItemProps) => void,
     currentItem?: string,
+    resetEditing?: () => void,
 }
 
 function List(props: ListProps){
@@ -58,7 +59,7 @@ function List(props: ListProps){
                 
                 return (
                     <div className={containerClass + "-list-item"}>
-                        <Link key={item.name} to={props.linkTo + item.name} className={selected}>
+                        <Link key={item.name} to={props.linkTo + item.name} onClick={props.resetEditing} className={selected}>
                             {item.name}
                         </Link>
                         <input 

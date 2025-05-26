@@ -1,6 +1,7 @@
 import List from "./list";
 import Calculator from "./gradeCalculator";
 import type { Course, Grade, Quarter, School, SchoolPosition } from "../App";
+import { useState } from "react";
 
 interface MainContainerProps {
     linkTo: string;
@@ -18,13 +19,16 @@ interface ListItemProps {
 }
 
 function MainContainer(props: MainContainerProps){
+    
     let isSingle = true;
     let calcPosition: SchoolPosition = {};
     let gradeRows: Grade[] | undefined= [];
+    let [isEditingGrades, setisEditingGrades] = [[] as boolean[], (_e: boolean[]) => console.log("not setting isEditingGrades")]
     if(props.listName === "Classes"){
         isSingle = false;
         calcPosition = Object.assign({class: props.selectedItem} as SchoolPosition, props.position);
         gradeRows = (props.list as Course[]).find(c => c.name === props.selectedItem)?.gradeRows;
+        if(gradeRows) [isEditingGrades, setisEditingGrades] = useState(gradeRows?.map(() => false));
         if(!gradeRows) {gradeRows = [] as Grade[]};
     }
 
@@ -56,8 +60,18 @@ function MainContainer(props: MainContainerProps){
         )
 
         classGrades = classGrades.filter((grade: number) => grade != -1);
+        if(classGrades.length === 0) classGrades = [0]
         return classGrades.reduce((prev: number, cur: number) => prev + cur)/classGrades.length + 0;
     }
+
+    function resetIsEditingGrades(){
+        const isEditingGradesCopy = isEditingGrades.slice();
+        for(let i in isEditingGradesCopy){
+            isEditingGradesCopy[i] = false;
+        }
+        setisEditingGrades(isEditingGradesCopy);
+    }
+
     return (
         <main>
             <div className="column-container" id="left">
@@ -72,6 +86,7 @@ function MainContainer(props: MainContainerProps){
                     doCrudOperation={props.doCrudOperation}
                     position={props.position}
                     isHeader={false}
+                    resetEditing={resetIsEditingGrades}
                 />
             </div>
             <Calculator 
@@ -80,6 +95,8 @@ function MainContainer(props: MainContainerProps){
                 isSingle={isSingle} 
                 doCrudOperation={props.doCrudOperation} 
                 selectedItem={props.selectedItem}
+                isEditingGrades={isEditingGrades}
+                setisEditingGrades={setisEditingGrades}
             />
         </main>
     );
