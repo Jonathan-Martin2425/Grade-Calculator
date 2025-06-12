@@ -1,5 +1,6 @@
 import { Link } from "react-router";
-import type { Quarter, School, SchoolPosition } from "../App";
+import type { IApiSchoolData, Quarter } from "../../../backend/src/common/ApiImageData";
+import type { SchoolPosition } from "../App";
 import NewListItem from "./newListItem";
 import { useState } from "react";
 
@@ -14,7 +15,7 @@ interface ListProps {
     items: ListItemProps[],
     isHeader: boolean,
     position: SchoolPosition,
-    doCrudOperation: (position: SchoolPosition, operation: string, data1: ListItemProps, data2?: School | Quarter | ListItemProps) => void,
+    doCrudOperation: (position: SchoolPosition, operation: string, data1: ListItemProps, data2?: IApiSchoolData | Quarter | ListItemProps) => void,
     currentItem?: string,
     resetEditing?: () => void,
 }

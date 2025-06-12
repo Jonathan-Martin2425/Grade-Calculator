@@ -2,15 +2,17 @@ import Header from "../components/header";
 import MainContainer from "../components/mainContainer";
 import { useParams } from "react-router";
 import { Link } from "react-router";
-import { type Grade, type Quarter, type School, type SchoolPosition } from "../App";
+import { type SchoolPosition } from "../App";
+import type { IApiSchoolData, Quarter, Grade } from "../../../backend/src/common/ApiImageData";
 import type { ListItemProps } from "../components/list";
 
 interface QuarterPageProps {
     toggleDarkMode: () => void,
+    logout: () => void,
     darkModeClass: string,
     quarters: Quarter[],
     position: SchoolPosition,
-    doCrudOperation: (position: SchoolPosition, operation: string, data1: ListItemProps | Grade, data2?: School | Quarter | ListItemProps | Grade) => void,
+    doCrudOperation: (position: SchoolPosition, operation: string, data1: ListItemProps | Grade, data2?: IApiSchoolData | Quarter | ListItemProps | Grade) => void,
 }
 
 export default function QuarterPage(props: QuarterPageProps){
@@ -31,7 +33,7 @@ export default function QuarterPage(props: QuarterPageProps){
 
     return (
         <div className={props.darkModeClass}>
-            <Header title={quarter ? quarter : "No Quarter Given"} darkModeClass={props.darkModeClass} toggleDarkMode={props.toggleDarkMode}>
+            <Header title={quarter ? quarter : "No Quarter Given"} darkModeClass={props.darkModeClass} toggleDarkMode={props.toggleDarkMode} logout={props.logout}>
                 <div className="header-container">
                     <Link to="/homepage" className="bigger">Back</Link>
                 </div>

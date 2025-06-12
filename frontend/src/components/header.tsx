@@ -1,9 +1,8 @@
-import { Link } from "react-router";
-
 interface HeaderProps {
     title: string,
     children: React.ReactNode,
     toggleDarkMode: () => void,
+    logout: () => void,
     darkModeClass: string,
 }
 
@@ -24,8 +23,8 @@ function Header(props: HeaderProps){
                         <label htmlFor="dark-mode">Dark Mode</label>
                         <input type="checkbox" id="dark-mode" checked={isDarkMode} onClick={props.toggleDarkMode}></input>
                     </div>
-                    <form method="get" action="index.html">
-                        <Link to="/"><input type="submit" className="logout-button" value="Logout" formAction="index.html"/></Link>
+                    <form method="get" action={props.logout}>
+                        <input type="submit" className="logout-button" value="Logout"/>
                     </form>
                 </div>
             </nav> 

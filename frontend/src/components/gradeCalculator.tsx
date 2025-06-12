@@ -1,14 +1,15 @@
 //import { useState } from "react";
 
 import { useState } from "react";
-import type { SchoolPosition, School, Quarter, Grade } from "../App";
+import type { IApiSchoolData, Quarter, Grade } from "../../../backend/src/common/ApiImageData";
+import type { SchoolPosition } from "../App";
 import type { ListItemProps } from "./list";
 import NewGradRow from "./NewGradeRow";
 
 interface CalculatorProps {
     rows: Grade[],
     position: SchoolPosition,
-    doCrudOperation: (position: SchoolPosition, operation: string, data1: ListItemProps | Grade, data2?: School | Quarter | ListItemProps | Grade) => void,
+    doCrudOperation: (position: SchoolPosition, operation: string, data1: ListItemProps | Grade, data2?: IApiSchoolData | Quarter | ListItemProps | Grade) => void,
     isEditingGrades: boolean[],
     setisEditingGrades: (isEditingGrades: boolean[]) => void
     isSingle?: boolean,

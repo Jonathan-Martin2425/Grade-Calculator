@@ -1,5 +1,5 @@
 import { useState } from "react";
-import type { Grade } from "../App";
+import type { Grade } from "../../../backend/src/common/ApiImageData";
 
 interface ChangeGradRowProps {
     deleteRow: () => void,

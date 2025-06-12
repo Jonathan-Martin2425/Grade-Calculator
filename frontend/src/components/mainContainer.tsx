@@ -1,6 +1,7 @@
 import List from "./list";
 import Calculator from "./gradeCalculator";
-import type { Course, Grade, Quarter, School, SchoolPosition } from "../App";
+import type { IApiSchoolData, Quarter, Course, Grade } from "../../../backend/src/common/ApiImageData";
+import type { SchoolPosition } from "../App";
 import { useState } from "react";
 
 interface MainContainerProps {
@@ -8,7 +9,7 @@ interface MainContainerProps {
     listName: string,
     list: ListItemProps[] | Course[],
     position: SchoolPosition,
-    doCrudOperation: (position: SchoolPosition, operation: string, data1: ListItemProps | Grade, data2?: School | Quarter | ListItemProps | Grade) => void,
+    doCrudOperation: (position: SchoolPosition, operation: string, data1: ListItemProps | Grade, data2?: IApiSchoolData | Quarter | ListItemProps | Grade) => void,
     selectedItem?: string,
     CumulativeGPA?: string,
 }
