@@ -7,6 +7,7 @@ import { useRef, useState } from "react";
 import type { ListItemProps } from "./components/list";
 import { ProtectedRoute } from "./ProtectedRoute";
 import type { IApiSchoolData, Quarter, Grade } from "../../backend/src/common/ApiImageData";
+import { ValidRoutes } from "../../shared/ValidRoutes.ts"
 
 
 // interface below describe a position of data in the school heiarchy 
@@ -313,9 +314,9 @@ function App() {
 
     return (
         <Routes>
-            <Route path="/" element={<Login setToken={loginWithToken} isRegister={false}/>}/>
-            <Route path="/register" element={<Login setToken={loginWithToken} isRegister={true}/>}/>
-            <Route path="/homepage" 
+            <Route path={ValidRoutes.LOGIN} element={<Login setToken={loginWithToken} isRegister={false}/>}/>
+            <Route path={ValidRoutes.REGISTER} element={<Login setToken={loginWithToken} isRegister={true}/>}/>
+            <Route path={ValidRoutes.HOME}
                 element={
                 <ProtectedRoute authToken={token}>
                     <Homepage 
@@ -328,7 +329,7 @@ function App() {
                     />
                 </ProtectedRoute>
             }/>
-            <Route path="/homepage/:school" 
+            <Route path={ValidRoutes.HOME_SCHOOL}
             element={
                 <ProtectedRoute authToken={token}>
                     <Homepage 
@@ -341,7 +342,7 @@ function App() {
                     />
                 </ProtectedRoute>
             }/>
-            <Route path="/quarter" element={
+            <Route path={ValidRoutes.QUARTER} element={
                 <ProtectedRoute authToken={token}>
                     <QuarterPage 
                         toggleDarkMode={TogleDarkMode}
@@ -353,7 +354,7 @@ function App() {
                     />
                 </ProtectedRoute>
             }/>
-            <Route path="/quarter/:quarter" element={
+            <Route path={ValidRoutes.QUARTER_SPECIFIED} element={
                 <ProtectedRoute authToken={token}>
                     <QuarterPage 
                         toggleDarkMode={TogleDarkMode}
@@ -365,7 +366,7 @@ function App() {
                     />
                 </ProtectedRoute>
             }/>
-            <Route path="/quarter/:quarter/class/:classItem" element={
+            <Route path={ValidRoutes.CLASS} element={
                 <ProtectedRoute authToken={token}>
                     <QuarterPage 
                         toggleDarkMode={TogleDarkMode}
