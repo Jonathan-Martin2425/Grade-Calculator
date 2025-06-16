@@ -23,7 +23,7 @@ function MainContainer(props: MainContainerProps){
     
     let isSingle = true;
     let calcPosition: SchoolPosition = {};
-    let gradeRows: Grade[] | undefined= [];
+    let gradeRows: Grade[] | undefined = [];
     let [isEditingGrades, setisEditingGrades] = [[] as boolean[], (_e: boolean[]) => console.log("not setting isEditingGrades")]
     if(props.listName === "Classes"){
         isSingle = false;
@@ -73,6 +73,8 @@ function MainContainer(props: MainContainerProps){
         setisEditingGrades(isEditingGradesCopy);
     }
 
+    let leftList = props.list.slice() as ListItemProps[];
+    leftList = leftList.filter((quarter) => quarter.name);
     return (
         <main>
             <div className="column-container" id="left">
@@ -82,7 +84,7 @@ function MainContainer(props: MainContainerProps){
                 <List 
                     title={props.listName} 
                     linkTo={props.linkTo} 
-                    items={props.list as ListItemProps[]} 
+                    items={leftList as ListItemProps[]} 
                     currentItem={props.selectedItem} 
                     doCrudOperation={props.doCrudOperation}
                     position={props.position}

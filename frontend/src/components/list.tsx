@@ -29,7 +29,9 @@ function List(props: ListProps){
     }
 
     function startAddingItem(){
-        setIsAddingItem(true);
+        if(props.position.school !== ""){
+            setIsAddingItem(true);
+        }
     }
 
     function finishAddingItem(data: ListItemProps, position: SchoolPosition){
@@ -49,6 +51,7 @@ function List(props: ListProps){
     if(props.isHeader){
         containerClass = "header-container";
     }
+
 
     return (
         <fieldset className={containerClass} id={props.title}>

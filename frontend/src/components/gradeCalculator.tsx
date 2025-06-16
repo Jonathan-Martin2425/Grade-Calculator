@@ -18,6 +18,7 @@ interface CalculatorProps {
 
 function Calculator(props: CalculatorProps){
     const [isAddingGrade, setIsAddingGrade] = useState(false);
+    const [isEditingGradesSingle, setisEditingGradesSingle] = useState([] as boolean[]);
     const [calcRows, setCalcRows] = useState(props.rows);
 
     let createElement = (
@@ -28,6 +29,7 @@ function Calculator(props: CalculatorProps){
             <td/>
         </tr>
     );  
+
     if(isAddingGrade){
         createElement = (
             <NewGradRow 
@@ -44,13 +46,16 @@ function Calculator(props: CalculatorProps){
             const clacRowsCopy = calcRows.slice();
             clacRowsCopy.push(row);
             setCalcRows(clacRowsCopy);
+
+            const editingListCopy = [...isEditingGradesSingle];
+            editingListCopy.push(false);
+            setisEditingGradesSingle(editingListCopy);
         }else{
             props.doCrudOperation(props.position, "create", row);
+            const editingListCopy = [...props.isEditingGrades];
+            editingListCopy.push(false);
+            props.setisEditingGrades(editingListCopy);
         }
-        
-        const editingListCopy = [...props.isEditingGrades];
-        editingListCopy.push(false);
-        props.setisEditingGrades(editingListCopy);
     }
 
     function deleteCalcRow(row: Grade, rowIndex: number){
@@ -58,13 +63,17 @@ function Calculator(props: CalculatorProps){
             let calcRowsCopy = calcRows.slice();
             calcRowsCopy = calcRowsCopy.filter(grade => grade !== row);
             setCalcRows(calcRowsCopy);
+
+            const editingListCopy = [...isEditingGradesSingle];
+            delete editingListCopy[rowIndex];
+            setisEditingGradesSingle(editingListCopy);
         }else{
             props.doCrudOperation(props.position, "delete", row);
-        }
 
-        const editingListCopy = [...props.isEditingGrades];
-        delete editingListCopy[rowIndex];
-        props.setisEditingGrades(editingListCopy);
+            const editingListCopy = [...props.isEditingGrades];
+            delete editingListCopy[rowIndex];
+            props.setisEditingGrades(editingListCopy);
+        }
     }
 
     function startAddingGrade(){
@@ -72,9 +81,15 @@ function Calculator(props: CalculatorProps){
     }
 
     function startEditingGrade(i: number){
-        const editingListCopy = [...props.isEditingGrades];
-        editingListCopy[i] = true;
-        props.setisEditingGrades(editingListCopy);
+        if(props.isSingle){
+            const editingListCopy = [...isEditingGradesSingle];
+            editingListCopy[i] = true;
+            setisEditingGradesSingle(editingListCopy);
+        }else{
+            const editingListCopy = [...props.isEditingGrades];
+            editingListCopy[i] = true;
+            props.setisEditingGrades(editingListCopy);
+        }
     }
 
     function finishAddingGrade(row: Grade){
@@ -89,7 +104,7 @@ function Calculator(props: CalculatorProps){
             }
         }
 
-        if(row.catagory !== "" && row.grade !== "/" && !Number.isNaN(formatedGradeNums[0])  && !Number.isNaN(formatedGradeNums[1])){
+        if(row.catagory !== "" && !Number.isNaN(row.percentage) && row.grade !== "/" && !Number.isNaN(formatedGradeNums[0])  && !Number.isNaN(formatedGradeNums[1])){
             addCalcRow(row);
         }
         setIsAddingGrade(false);
@@ -119,6 +134,10 @@ function Calculator(props: CalculatorProps){
         total += (curRows[i].percentage/100) * (gradeAmmount[0]/gradeAmmount[1]);
     }
 
+    let isEditingArray = props.isEditingGrades;
+    if(props.isSingle){
+        isEditingArray = isEditingGradesSingle;
+    }
     return (
     <div className="column-container">
         <h2>Grade Calculator</h2>
@@ -148,7 +167,7 @@ function Calculator(props: CalculatorProps){
                             </td>
                         </tr>
                     )
-                    if(props.isEditingGrades[rowIndex]){
+                    if(isEditingArray[rowIndex]){
                         editElement = (<NewGradRow 
                                 deleteRow={() => deleteCalcRow(row, rowIndex)}
                                 ChangeType="edit"

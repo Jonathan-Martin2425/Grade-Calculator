@@ -45,7 +45,7 @@ function App() {
         navigate("/");
     }
 
-    async function updateGradeData(possibleToken: string = ""){
+    async function updateGradeData(possibleToken: string = "", possibleSchool: string = ""){
         let curToken = token;
         if(possibleToken) curToken = possibleToken;
         const response = await fetch("/api/schools", {
@@ -66,6 +66,16 @@ function App() {
             if(curRef !== ref.current) {return null};
             const schools: IApiSchoolData[] = resJson as IApiSchoolData[];
             schools.sort((a, b) => a.name.localeCompare(b.name))
+
+            if(possibleSchool){
+                let newSchoolIndex: number = 0;
+                for(let i in schools){
+                    if(schools[i].name === possibleSchool){
+                        newSchoolIndex = Number(i);
+                    }
+                }
+                setCurrentSchoolIndex(newSchoolIndex);
+            }
             if(schools) setSchools(schools);
         }else{
             //_setFetchHasErrored(true)
@@ -79,6 +89,12 @@ function App() {
         data2?: IApiSchoolData | Quarter | ListItemProps | Grade,
     ): Promise<errorMessage | void>{
 
+
+        /*
+        position: {school: ""},
+        operation: "create",
+        data1: {name: "some name"},
+        */
         let datatype = "school"
         if(position.school){
             datatype = "quarter";
@@ -114,15 +130,12 @@ function App() {
         }
 
         const curSchoolCopy = schools.slice()[currentSchoolIndex];
-        await updateGradeData();
-        //makes sure current school stays selected after list is changed
-        let newSchoolIndex: number = 0;
-        for(let i in schools){
-            if(schools[i].name === curSchoolCopy.name){
-                newSchoolIndex = Number(i);
-            }
+
+        if(datatype = "school"){
+            await updateGradeData("", curSchoolCopy.name);
+        }else{
+            await updateGradeData()
         }
-        setCurrentSchoolIndex(newSchoolIndex);
 
         if(possibleError) return possibleError;
     }
@@ -226,6 +239,7 @@ function App() {
             },
             body: body,
         });
+
         if(res.status >= 400){
             return {
                 error: "Internal Server Error",
@@ -312,6 +326,7 @@ function App() {
         curSchool = schools[currentSchoolIndex];
     }
 
+    
     return (
         <Routes>
             <Route path={ValidRoutes.LOGIN} element={<Login setToken={loginWithToken} isRegister={false}/>}/>

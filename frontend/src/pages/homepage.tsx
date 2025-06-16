@@ -80,6 +80,7 @@ export function Homepage(props: HomepageProps){
     }else{
         curSchool = props.schools[currentSchoolIndex];
     }
+
     return (<div className={props.darkModeClass}>
                 <Header title="Schools" darkModeClass={props.darkModeClass} toggleDarkMode={props.toggleDarkMode} logout={props.logout}>
                     <List 
